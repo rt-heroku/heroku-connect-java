@@ -28,11 +28,14 @@ module.exports = function(topic, command) {
 function* generate(context, heroku) {
 
   let appName = context.flags.app || context.args.app || context.app || process.env.HEROKU_APP
-  console.log(`Configuring app: ${appName}`);
-  //console.log(`Configuring app (flag): ${appName}`);
-  //console.log(util.inspect(context, false, null))
+  console.log('Initializing Git repo...')
+  child.execSync(`git init`)
+  console.log('Creating Java Project...')
+  child.execSync(`curl https://start.spring.io/starter.tgz -d dependencies=web,data-jpa,security,devtools,postgresql,data-rest -d type=maven-project -d packageName=${context.flags.package} -d artifactId=${appName} -d groupId=${context.flags.package} | tar -xzvf -`);
+  
+  console.log(`Creating Heroku app ... ${appName} `);
+  child.execSync(`heroku create -a ${appName} --addons heroku-postgresql`) // TODO `heroku git:remote` if it exists
 
-  console.log('Reading pom.xml...');
   var pom = fs.readFileSync('pom.xml', 'utf8');
   xml2js.parseString(pom, function (err, pomObj) {
     pomObj['project']['groupId'] = `${context.flags.package}`

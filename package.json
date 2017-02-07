@@ -16,7 +16,7 @@
   "author": "Joe Kutner <joe@heroku.com>",
   "license": "ISC",
   "dependencies": {
-    "heroku-cli-util": "^6.0.14",
+    "heroku-cli-util": "^6.1.1",
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
