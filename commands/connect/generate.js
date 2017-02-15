@@ -110,7 +110,7 @@ function* generate(context, heroku) {
 
         child.execSync(`git push heroku master`)
 
-        child.execSync(`heroku logs -t`)
+//        child.execSync(`heroku logs -t`)
 //        child.execSync(`heroku run "java -jar target/test-connect-api-0.0.1-SNAPSHOT.jar P@ssw0rd1 sysadmin@secure-api.heroku.com`)
 
     });
