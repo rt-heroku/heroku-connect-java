@@ -1,6 +1,9 @@
 # Heroku Connect Java Generator
 
 ```
-$ heroku plugins:install <URL>
-$ heroku connect:generate
+$ heroku connect:generate -a <<heroku app name>> -p <<package name>>
+
+i.e
+$ heroku connect:generate -a test-connect-api -p com.heroku
+
 ```
