@@ -17,7 +17,9 @@
   "license": "ISC",
   "dependencies": {
     "heroku-cli-util": "^6.1.1",
-    "xml2js": "^0.4.17"
+    "parse-database-url": "^0.3.0",
+    "xml2js": "^0.4.17",
+    "parse-database-url": "*"
   },
   "devDependencies": {
     "fixture-stdout": "0.2.1",

@@ -4,5 +4,6 @@ exports.topics = [
 
 exports.commands = [
   require('./commands/connect/generate')('connect', 'generate'),
-  require('./commands/connect/init')('connect', 'init')
+  require('./commands/connect/init')('connect', 'init'),
+  require('./commands/connect/test')('connect', 'test')
 ]
