@@ -1,5 +1,5 @@
 exports.topic =  { 
-	name: 'connect', 
+	name: 'connect-api', 
 	description: 'Heroku connect' 
 }
 
