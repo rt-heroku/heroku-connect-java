@@ -21,11 +21,11 @@ module.exports = function(topic, command) {
     description: 'Generates Java code from a Heroku Connect datastore.',
     needsApp: true,
     needsAuth: true,
-    run: cli.command(co.wrap(generate))
+    run: cli.command(co.wrap(test))
   };
 };
 
-function* generate(context, heroku) {
+function* test(context, heroku) {
 
   let appName = context.flags.app || context.args.app || context.app || process.env.HEROKU_APP
   let packageName = `${context.flags.package}`;
@@ -66,29 +66,6 @@ function* generate(context, heroku) {
     child.execSync(`mvn clean package install -DskipTests`);
     child.execSync(`mvn eclipse:clean eclipse:eclipse`);
 
-    // co(function*() {
-    //       let configVars = yield heroku.get(`/apps/${context.app}/config-vars`);
-    //       return configVars;
-    // }).then(function (cv) {
-    //       console.log('Config variables:');
-    //       console.log(util.inspect(cv, false, null));
-    //       // var dbConfig = parseDbUrl(cv.DATABASE_URL);
-    //       // console.log(util.inspect(dbConfig, false, null));
-
-    //     console.log(`Generating code`);
-    //     child.execSync(`java -cp bin/rest-builder-1.0.jar co.rtapps.builder.CodeGenerator -a ${appName} -p ${packageName} -e ${packageName}.entities -D ${cv.DATABASE_URL} `);
-  
-    //     console.log(`Pushing to Heroku`);
-    //     child.execSync(`git add .`)
-    //     child.execSync(`git commit -m "Add generated code"`)
-
-    //     child.execSync(`git push heroku master`)
-
-    //     child.execSync(`heroku logs -t`)
-
-    // });
-
-//Add dependency
   });
 
 }

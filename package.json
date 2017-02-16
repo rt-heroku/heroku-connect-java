@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Generate a Java app from Heroku Connect datastore",
   "main": "index.js",
-  "repository": "https://github.com/jkutner/heroku-connect-java",
+  "repository": "https://github.com/rt-heroku/heroku-connect-java",
   "scripts": {
     "test": "mocha",
     "depcheck": "depcheck || true"
@@ -13,7 +13,7 @@
     "cli",
     "heroku-plugin"
   ],
-  "author": "Joe Kutner <joe@heroku.com>",
+  "author": "Rodrigo Torres <rt@heroku.com>",
   "license": "ISC",
   "dependencies": {
     "heroku-cli-util": "^6.1.1",
