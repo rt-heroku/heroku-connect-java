@@ -5,7 +5,7 @@ exports.topic =  {
 
 
 exports.commands = [
-  require('./commands/connect/generate')('connect', 'generate'),
-  require('./commands/connect/init')('connect', 'init'),
-  require('./commands/connect/test')('connect', 'test')
+  require('./commands/connect-api/generate.js')('connect-api', 'generate'),
+  require('./commands/connect-api/init.js')('connect-api', 'init'),
+  require('./commands/connect-api/test.js')('connect-api', 'test')
 ]

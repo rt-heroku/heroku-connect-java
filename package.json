@@ -17,20 +17,22 @@
   "license": "ISC",
   "dependencies": {
     "heroku-cli-util": "^6.1.1",
-    "parse-database-url": "^0.3.0",
-    "xml2js": "^0.4.17",
-    "parse-database-url": "*"
+    "parse-database-url": "*",
+    "xml2js": "^0.4.17"
   },
   "devDependencies": {
-    "fixture-stdout": "0.2.1",
     "chai": "^3.2.0",
     "depcheck": "^0.4.7",
     "dir-compare": "^0.0.2",
+    "fixture-stdout": "0.2.1",
     "fs-extra": "^0.23.1",
     "heroku-client": "^3.0.0-beta2",
-    "mocha": "^2.2.4",
-    "wrench": "^1.5.8",
-    "unexpected": "10.13.2",
-    "tmp": "0.0.28"
+    "mocha": "^2.5.3",
+    "mockdate": "^2.0.1",
+    "nock": "^9.0.6",
+    "standard": "^8.6.0",
+    "tmp": "0.0.28",
+    "unexpected": "^10.13.2",
+    "wrench": "^1.5.8"
   }
 }
