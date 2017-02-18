@@ -1,6 +1,6 @@
 {
   "name": "heroku-connect-java",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Generate a Java app from Heroku Connect datastore",
   "main": "index.js",
   "repository": "https://github.com/rt-heroku/heroku-connect-java",
