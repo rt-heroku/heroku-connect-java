@@ -49,7 +49,7 @@ function* generate(context, heroku) {
     pomObj['project']['dependencies'][0]['dependency'].push({
         'groupId': 'co.rtapps',
         'artifactId': 'security-db',
-        'version' : '0.0.1.RELEASE'
+        'version' : '0.1.0.RELEASE'
     })
 
     pomObj['project']['repositories']=[{'repository':{
@@ -72,7 +72,7 @@ function* generate(context, heroku) {
     fs.writeFileSync('pom.xml', xml)
 
     console.log(`Adding libraries to project repo `);
-    child.execSync(`mvn deploy:deploy-file -Durl=file:repo -Dfile=bin/security-db-0.0.1.RELEASE.jar -DgroupId=co.rtapps -DartifactId=security-db -Dpackaging=jar -Dversion=0.0.1.RELEASE`);
+    child.execSync(`mvn deploy:deploy-file -Durl=file:repo -Dfile=bin/security-db-0.1.0.RELEASE.jar -DgroupId=co.rtapps -DartifactId=security-db -Dpackaging=jar -Dversion=0.1.0.RELEASE`);
 
     console.log(`Adding eclipse support `);
     child.execSync(`mvn clean package install -DskipTests`);
