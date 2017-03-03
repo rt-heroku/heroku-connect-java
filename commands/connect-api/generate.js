@@ -15,7 +15,9 @@ module.exports = function(topic, command) {
     command: command,
 /* TURN ON FLAG if needsApp = false*/
     flags: [/*{name: 'app', char: 'a', hasValue: true, description: 'the Heroku app to use'}*/
-    {name: 'package', char: 'p', hasValue: true, description: 'Java package'}],
+    {name: 'package', char: 'p', hasValue: true, description: 'Java package'},
+    {name: 'eclipse', char: 'e', hasValue: false, description: 'Adds eclipse support'},
+    {name: 'schema', char: 's', hasValue: true, description: 'Schema where the connect tables are'}],
     variableArgs: true,
     usage: `${topic}:${command}`,
     description: 'Generates Java code from a Heroku Connect datastore.',
@@ -29,6 +31,7 @@ function* generate(context, heroku) {
 
   let appName = context.flags.app || context.args.app || context.app || process.env.HEROKU_APP
   let packageName = `${context.flags.package}`;
+  let schema = context.flags.schema || 'salesforce';
   console.log('Initializing Git repo...')
   child.execSync(`git init`)
   console.log('Creating Java Project...')
@@ -38,12 +41,12 @@ function* generate(context, heroku) {
   child.execSync(`git clone https://github.com/rt-heroku/rest-builder-bin.git bin`)
 
   console.log(`Attaching to existing Heroku app ... ${appName} `);
-  child.execSync(`heroku git:remote -a ${appName}`) // TODO `heroku git:remote` if it exists
+  child.execSync(`heroku git:remote -a ${appName}`) 
 
   var pom = fs.readFileSync('pom.xml', 'utf8');
   xml2js.parseString(pom, function (err, pomObj) {
     pomObj['project']['groupId'] = `${context.flags.package}`
-    pomObj['project']['artifactId'] = `${appName}` // TODO get the app name from the one generate above
+    pomObj['project']['artifactId'] = `${appName}`
     pomObj['project']['name'] = `${appName}`
 
     pomObj['project']['dependencies'][0]['dependency'].push({
@@ -58,15 +61,6 @@ function* generate(context, heroku) {
         'url' : 'file:repo'
     }}]
 
-
-    // pomObj['project'].push({
-    //   repositories: {repository: {
-    //     'id': 'project.local',
-    //     'name': 'project',
-    //     'url' : 'file:${project.basedir}/bin'
-    // }}
-    // });
-
     var builder = new xml2js.Builder();
     var xml = builder.buildObject(pomObj);
     fs.writeFileSync('pom.xml', xml)
@@ -74,23 +68,13 @@ function* generate(context, heroku) {
     console.log(`Adding libraries to project repo `);
     child.execSync(`mvn deploy:deploy-file -Durl=file:repo -Dfile=bin/security-db-0.1.0.RELEASE.jar -DgroupId=co.rtapps -DartifactId=security-db -Dpackaging=jar -Dversion=0.1.0.RELEASE`);
 
-    console.log(`Adding eclipse support `);
-    child.execSync(`mvn clean package install -DskipTests`);
-    child.execSync(`mvn eclipse:clean eclipse:eclipse`);
-
-    console.log('Committing pom.xml changes...');
-    child.execSync(`git add .`)
-    child.execSync(`git commit -m "Add Security dependencies"`)
+    if (context.flags.eclipse){
+        console.log(`Adding eclipse support `);
+        child.execSync(`mvn clean package install -DskipTests`);
+        child.execSync(`mvn eclipse:clean eclipse:eclipse`);
+    }
 
     console.log('Writing database config...');
- //   fs.readFile('TelosysTools/databases.dbcfg', 'utf8', function (err, dbcfg) {
-      // dbcfg = dbcfg.replace('JDBC_DATABASE_URL', configVars['JDBC_DATABASE_URL'])
-      // dbcfg = dbcfg.replace('JDBC_DATABASE_USERNAME', configVars['JDBC_DATABASE_USERNAME'])
-      // dbcfg = dbcfg.replace('JDBC_DATABASE_PASSWORD', configVars['JDBC_DATABASE_PASSWORD'])
-      // fs.writeFileSync('TelosysTools/databases.dbcfg', dbcfg)
-
-      // TODO do the Telosys stuff?
-//    });
 
     co(function*() {
           let configVars = yield heroku.get(`/apps/${context.app}/config-vars`);
@@ -98,11 +82,9 @@ function* generate(context, heroku) {
     }).then(function (cv) {
           console.log('Config variables:');
           console.log(util.inspect(cv, false, null));
-          // var dbConfig = parseDbUrl(cv.DATABASE_URL);
-          // console.log(util.inspect(dbConfig, false, null));
-
+ 
         console.log(`Generating code`);
-        child.execSync(`java -cp bin/rest-builder-1.0.jar co.rtapps.builder.CodeGenerator -a ${appName} -p ${packageName} -e ${packageName}.entities -D ${cv.DATABASE_URL} `);
+        child.execSync(`java -cp bin/rest-builder-1.0.jar co.rtapps.builder.CodeGenerator -a ${appName} -p ${packageName} -e ${packageName}.entities -D ${cv.DATABASE_URL} -s ${schema} `);
   
         console.log(`Pushing to Heroku`);
         child.execSync(`git add .`)
@@ -110,12 +92,7 @@ function* generate(context, heroku) {
 
         child.execSync(`git push heroku master`)
 
-//        child.execSync(`heroku logs -t`)
-//        child.execSync(`heroku run "java -jar target/test-connect-api-0.0.1-SNAPSHOT.jar P@ssw0rd1 sysadmin@secure-api.heroku.com`)
-
     });
-
-//Add dependency
 
   });
 
